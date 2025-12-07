@@ -8,7 +8,7 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   url: 'https://sarim-stackdeveloper.github.io',
-  baseUrl: '/PhysicalAIHumanoidRoboticsCourse/',
+  baseUrl: '/',
   organizationName: 'sarim-stackdeveloper',
   projectName: 'PhysicalAIHumanoidRoboticsCourse',
   trailingSlash: false,
