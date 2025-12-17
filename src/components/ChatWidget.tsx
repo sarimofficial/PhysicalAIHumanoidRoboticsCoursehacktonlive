@@ -1,49 +1,147 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import styles from './ChatWidget.module.css';
+
+type ChatMessage = {
+    role: 'user' | 'assistant';
+    content: string;
+};
 
 const ChatWidget = () => {
     const [selectedText, setSelectedText] = useState('');
     const [question, setQuestion] = useState('');
-    const [answer, setAnswer] = useState('');
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const widgetRef = useRef<HTMLDivElement>(null);
+
+    // ----------- TEXT SELECTION (FIXED) -----------
     useEffect(() => {
         const handleMouseUp = () => {
-            const selection = window.getSelection()?.toString();
-            if (selection && selection.length > 0) {
-                setSelectedText(selection);
-                if (!isOpen) setIsOpen(true); // Auto-open on selection
-            }
+            setTimeout(() => {
+                const selection = window.getSelection();
+                if (!selection) return;
+
+                const text = selection.toString().trim();
+                if (!text) return;
+
+                const anchorNode = selection.anchorNode;
+                const element =
+                    anchorNode instanceof Element
+                        ? anchorNode
+                        : anchorNode?.parentElement;
+
+                if (!element) return;
+
+                if (
+                    element.closest('input') ||
+                    element.closest('textarea') ||
+                    widgetRef.current?.contains(element)
+                ) {
+                    return;
+                }
+
+                setSelectedText(text);
+                setIsOpen(true);
+                sendAutoQuery(text);
+
+                selection.removeAllRanges(); // optional UX improvement
+            }, 50);
         };
 
         document.addEventListener('mouseup', handleMouseUp);
         return () => document.removeEventListener('mouseup', handleMouseUp);
-    }, [isOpen]);
+    }, []);
 
-    const sendQuery = async () => {
-        if (!question.trim()) return;
+    const sendAutoQuery = async (text: string) => {
+        const autoQuestion = 'Explain the selected text';
 
+        const userMsg: ChatMessage = {
+            role: 'user',
+            content: autoQuestion,
+        };
+
+        const thinkingMsg: ChatMessage = {
+            role: 'assistant',
+            content: 'Thinking',
+        };
+
+        setMessages(prev => [...prev, userMsg, thinkingMsg]);
         setLoading(true);
+
         try {
-            // Note: Ensure backend is running on port 8000 and proxy is configured or CORS allows this
-            // For now, we assume a proxy or direct call. 
-            // If using direct call to different port, use full URL: http://localhost:8000/query
-            // But user code said '/api/query'. We will try that first.
             const res = await axios.post('http://localhost:8000/query', {
-                question,
-                selected_text: selectedText
+                question: autoQuestion,
+                selected_text: text,
+                history: [...messages, userMsg],
             });
-            setAnswer(res.data.answer);
-        } catch (error) {
-            console.error(error);
-            setAnswer('Error connecting to AI assistant.');
+
+            setMessages(prev => {
+                const updated = [...prev];
+                updated[updated.length - 1] = {
+                    role: 'assistant',
+                    content: res.data.answer,
+                };
+                return updated;
+            });
+        } catch {
+            setMessages(prev => {
+                const updated = [...prev];
+                updated[updated.length - 1] = {
+                    role: 'assistant',
+                    content: 'Error connecting to AI.',
+                };
+                return updated;
+            });
         } finally {
             setLoading(false);
         }
     };
 
+
+
+    // ----------- SEND MESSAGE -----------
+    const sendQuery = async () => {
+        if (!question.trim()) return;
+
+        const userMsg: ChatMessage = { role: 'user', content: question };
+        const thinkingMsg: ChatMessage = { role: 'assistant', content: 'Thinking' };
+
+        setMessages(prev => [...prev, userMsg, thinkingMsg]);
+        setQuestion('');
+        setLoading(true);
+
+        try {
+            const res = await axios.post('http://localhost:8000/query', {
+                question,
+                selected_text: selectedText,
+                history: [...messages, userMsg],
+            });
+
+            setMessages(prev => {
+                const updated = [...prev];
+                updated[updated.length - 1] = {
+                    role: 'assistant',
+                    content: res.data.answer,
+                };
+                return updated;
+            });
+        } catch {
+            setMessages(prev => {
+                const updated = [...prev];
+                updated[updated.length - 1] = {
+                    role: 'assistant',
+                    content: 'Error connecting to AI.',
+                };
+                return updated;
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // ----------- CLOSED STATE -----------
     if (!isOpen) {
         return (
             <button className={styles.toggleBtn} onClick={() => setIsOpen(true)}>
@@ -52,26 +150,40 @@ const ChatWidget = () => {
         );
     }
 
+    // ----------- UI -----------
     return (
-        <div className={styles.chatWidget}>
+        <div className={styles.chatWidget} ref={widgetRef}>
             <div className={styles.header} onClick={() => setIsOpen(false)}>
                 <span>AI Assistant</span>
                 <span>▼</span>
             </div>
+
             <div className={styles.body}>
+                {selectedText && (
+                    <div className={styles.contextInfo}>
+                        Context: “{selectedText.slice(0, 60)}…”
+                    </div>
+                )}
+
                 <div className={styles.messagesArea}>
-                    {selectedText && (
-                        <div className={styles.contextInfo}>
-                            Context: "{selectedText.substring(0, 30)}..."
-                        </div>
-                    )}
-                    {answer ? (
-                        <div className={styles.answer}>{answer}</div>
-                    ) : (
+                    {messages.length === 0 && (
                         <div className={styles.placeholder}>
-                            👋 Hi! Select text in the book to ask specific questions, or just ask me anything!
+                            Select text or ask a question to begin.
                         </div>
                     )}
+
+                    {messages.map((msg, idx) => (
+                        <div
+                            key={idx}
+                            className={
+                                msg.role === 'user'
+                                    ? styles.userMsg
+                                    : styles.aiMsg
+                            }
+                        >
+                            {msg.content}
+                        </div>
+                    ))}
                 </div>
 
                 <div className={styles.inputGroup}>
@@ -79,11 +191,16 @@ const ChatWidget = () => {
                         className={styles.input}
                         value={question}
                         onChange={e => setQuestion(e.target.value)}
-                        placeholder="Ask a question..."
+                        placeholder="Ask a question…"
                         onKeyDown={e => e.key === 'Enter' && sendQuery()}
+                        disabled={loading}
                     />
-                    <button className={styles.sendBtn} onClick={sendQuery} disabled={loading}>
-                        {loading ? '...' : 'Ask'}
+                    <button
+                        className={styles.sendBtn}
+                        onClick={sendQuery}
+                        disabled={loading}
+                    >
+                        {loading ? '…' : 'Ask'}
                     </button>
                 </div>
             </div>

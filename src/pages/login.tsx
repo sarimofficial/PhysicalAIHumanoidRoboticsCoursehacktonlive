@@ -10,18 +10,32 @@ export default function LoginPage(): React.JSX.Element {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
     const history = useHistory();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
         setLoading(true);
+
         try {
-            await axios.post('/api/auth/login', { email, password });
+            const res = await axios.post(
+                'http://localhost:8000/api/auth/signin',
+                { email, password }
+            );
+
+            // ✅ Save JWT token
+            localStorage.setItem('auth_token', res.data.token);
+
+            // ✅ Redirect after login
             history.push('/');
         } catch (err: any) {
             console.error(err);
-            setError(err.response?.data?.message || 'Login failed. Please try again.');
+            setError(
+                err.response?.data?.detail ||
+                err.response?.data?.message ||
+                'Login failed. Please try again.'
+            );
         } finally {
             setLoading(false);
         }
@@ -34,16 +48,21 @@ export default function LoginPage(): React.JSX.Element {
                     <h1 className={styles.title}>Log In</h1>
 
                     {error && (
-                        <div style={{ color: 'var(--ifm-color-danger)', marginBottom: '1rem', textAlign: 'center' }}>
+                        <div
+                            style={{
+                                color: 'var(--ifm-color-danger)',
+                                marginBottom: '1rem',
+                                textAlign: 'center',
+                            }}
+                        >
                             {error}
                         </div>
                     )}
 
                     <form onSubmit={handleLogin}>
                         <div className={styles.formGroup}>
-                            <label className={styles.label} htmlFor="email">Email Address</label>
+                            <label className={styles.label}>Email Address</label>
                             <input
-                                id="email"
                                 type="email"
                                 className={styles.input}
                                 value={email}
@@ -54,9 +73,8 @@ export default function LoginPage(): React.JSX.Element {
                         </div>
 
                         <div className={styles.formGroup}>
-                            <label className={styles.label} htmlFor="password">Password</label>
+                            <label className={styles.label}>Password</label>
                             <input
-                                id="password"
                                 type="password"
                                 className={styles.input}
                                 value={password}
@@ -67,12 +85,15 @@ export default function LoginPage(): React.JSX.Element {
                         </div>
 
                         <button type="submit" className={styles.button} disabled={loading}>
-                            {loading ? 'Logging in...' : 'Log In'}
+                            {loading ? 'Logging in…' : 'Log In'}
                         </button>
                     </form>
 
                     <span className={styles.subText}>
-                        Don't have an account? <Link to="/signup" className={styles.link}>Sign up</Link>
+                        Don&apos;t have an account?{' '}
+                        <Link to="/signup" className={styles.link}>
+                            Sign up
+                        </Link>
                     </span>
                 </div>
             </main>

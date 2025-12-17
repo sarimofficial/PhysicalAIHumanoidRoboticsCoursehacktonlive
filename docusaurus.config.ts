@@ -48,8 +48,21 @@ const config: Config = {
       items: [
         { type: 'docSidebar', sidebarId: 'tutorialSidebar', label: 'Book', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
+
+        // ---- AUTH LINKS (RIGHT SIDE) ----
+        {
+          to: '/login',
+          label: 'Login',
+          position: 'right',
+        },
+        {
+          to: '/signup',
+          label: 'Sign Up',
+          position: 'right',
+        },
       ],
     },
+
     footer: {
       style: 'dark',
       copyright: `Copyright © ${new Date().getFullYear()} All Right Received — Muhammad Sarim`,
