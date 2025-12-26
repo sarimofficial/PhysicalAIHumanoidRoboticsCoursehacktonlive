@@ -1,0 +1,39 @@
+name: Deploy Docusaurus to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Set a branch to deploy from (e.g., main, master, or gh-pages)
+    # paths:
+    #   - 'book/**' # Only run if changes are in the book directory
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # Fetch all commits, as Docusaurus GH pages deployment needs full history
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Use Node.js 18 or higher
+
+      - name: Install dependencies
+        run: |
+          cd book
+          npm install
+
+      - name: Build Docusaurus website
+        run: |
+          cd book
+          npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./book/build # The output directory of Docusaurus build

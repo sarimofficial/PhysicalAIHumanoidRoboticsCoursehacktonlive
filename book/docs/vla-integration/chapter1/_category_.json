@@ -1,0 +1,8 @@
+{
+  "label": "Foundations of VLA",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Introduction to Vision, Language, and Action in robotics."
+  }
+}

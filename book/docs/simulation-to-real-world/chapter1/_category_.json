@@ -1,0 +1,8 @@
+{
+  "label": "Bridging Sim2Real Gap",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Strategies and techniques for successful sim-to-real transfer."
+  }
+}

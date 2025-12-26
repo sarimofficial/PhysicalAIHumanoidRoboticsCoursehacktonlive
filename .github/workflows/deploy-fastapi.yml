@@ -1,0 +1,31 @@
+name: Deploy FastAPI Backend to Render
+
+on:
+  push:
+    branches:
+      - main # Trigger on pushes to the main branch
+    # paths:
+    #   - 'backend/**' # Only run if changes are in the backend directory
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build and push Docker image to Render
+        uses: achorekar/render-action@v1.2.0 # Use a Render deployment action, this is an example
+        with:
+          service_id: ${{ secrets.RENDER_SERVICE_ID }}
+          api_key: ${{ secrets.RENDER_API_KEY }}
+          # Path to your backend directory
+          repo_path: ./backend 
+          # You might need to specify the Dockerfile path if it's not in repo_path root
+          dockerfile_path: ./backend/Dockerfile 
+          # Name of the service to deploy, typically set in Render dashboard
+          # service_name: "your-fastapi-backend" 
+          # env_vars: | # Example of passing env vars, better use Render dashboard for secrets
+          #   OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          #   DATABASE_URL=${{ secrets.DATABASE_URL }}
+          #   QDRANT_API_KEY=${{ secrets.QDRANT_API_KEY }}
+          #   QDRANT_URL=${{ secrets.QDRANT_URL }}

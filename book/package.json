@@ -1,0 +1,49 @@
+{
+  "name": "physical-ai-humanoid-robotics-book",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "npx docusaurus start",
+    "build": "npx docusaurus build",
+    "swizzle": "npx docusaurus swizzle",
+    "deploy": "npx docusaurus deploy && gh-pages -d build --add",
+    "clear": "npx docusaurus clear",
+    "serve": "npx docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.9.2",
+    "@docusaurus/preset-classic": "^3.9.2",
+    "@mdx-js/react": "^3.0.0",
+    "axios": "^1.13.2",
+    "clsx": "^2.1.0",
+    "framer-motion": "^11.18.2",
+    "prism-react-renderer": "^2.4.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "^3.9.2",
+    "@docusaurus/tsconfig": "3.3.2",
+    "@docusaurus/types": "^3.3.2",
+    "gh-pages": "^6.3.0",
+    "typescript": "~5.2.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 3 chrome version",
+      "last 3 firefox version",
+      "last 3 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0"
+  }
+}

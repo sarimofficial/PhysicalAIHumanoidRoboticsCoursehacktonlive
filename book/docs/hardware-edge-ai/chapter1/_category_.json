@@ -1,0 +1,8 @@
+{
+  "label": "Foundational Hardware for Robotics",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Understanding essential components like sensors, actuators, and microcontrollers."
+  }
+}

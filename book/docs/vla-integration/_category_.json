@@ -1,0 +1,8 @@
+{
+  "label": "Vision-Language-Action Integration",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Integrate vision, language, and action for intelligent robots."
+  }
+}

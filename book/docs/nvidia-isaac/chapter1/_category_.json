@@ -1,0 +1,8 @@
+{
+  "label": "Introduction to NVIDIA Isaac Platform",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Overview of NVIDIA Isaac ecosystem for robotics development."
+  }
+}

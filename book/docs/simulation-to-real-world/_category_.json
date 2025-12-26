@@ -1,0 +1,8 @@
+{
+  "label": "Simulation to Real World",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Bridging the gap between simulated and physical robots."
+  }
+}

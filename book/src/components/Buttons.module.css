@@ -1,0 +1,61 @@
+.personalizeBtn, .translateBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--ifm-font-family-base);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-right: 12px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Personalize Button - Gradient */
+.personalizeBtn {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.personalizeBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+  filter: brightness(1.1);
+}
+
+.personalizeBtn:active {
+  transform: translateY(0);
+}
+
+/* Translate Button - Glassmorphism / Outline */
+.translateBtn {
+  background: transparent;
+  color: var(--ifm-color-content);
+  border: 2px solid currentColor;
+  opacity: 0.8;
+}
+
+.translateBtn:hover {
+  opacity: 1;
+  background: rgba(124, 58, 237, 0.05);
+  transform: translateY(-2px);
+  border-color: #7c3aed;
+  color: #7c3aed;
+}
+
+[data-theme='dark'] .translateBtn:hover {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: #a78bfa;
+  color: #a78bfa;
+}
+
+.icon {
+  font-size: 1.2em;
+  line-height: 1;
+}

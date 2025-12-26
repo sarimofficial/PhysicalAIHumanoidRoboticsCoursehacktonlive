@@ -1,0 +1,8 @@
+{
+  "label": "Integrated VLA Architectures",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Designing and implementing end-to-end VLA systems."
+  }
+}

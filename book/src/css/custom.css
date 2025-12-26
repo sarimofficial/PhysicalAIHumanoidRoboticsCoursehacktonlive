@@ -1,0 +1,136 @@
+/**
+ * Global CSS — Modern Grid Design
+ * Optimized for Docusaurus + Infima
+ */
+
+/* ===============================
+   Root Variables
+================================ */
+:root {
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.08);
+
+  /* Modern layout tokens */
+  --container-max-width: 1200px;
+  --grid-gap: 1.5rem;
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ===============================
+   Dark Mode Overrides
+================================ */
+[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.08);
+}
+
+/* ===============================
+   Base Grid Layout
+================================ */
+.main-wrapper {
+  display: grid;
+  grid-template-columns:
+    minmax(1rem, 1fr)
+    minmax(0, var(--container-max-width))
+    minmax(1rem, 1fr);
+}
+
+.main-wrapper > * {
+  grid-column: 2;
+}
+
+/* ===============================
+   Page Sections
+================================ */
+.section {
+  display: grid;
+  gap: var(--grid-gap);
+  margin: 4rem 0;
+}
+
+/* ===============================
+   Modern Card Style
+================================ */
+.card {
+  background: var(--ifm-card-background-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ===============================
+   Typography Polish
+================================ */
+h1, h2, h3 {
+  letter-spacing: -0.02em;
+}
+
+p {
+  line-height: 1.7;
+}
+
+/* ===============================
+   Buttons (Modern Feel)
+================================ */
+.button {
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+/* ===============================
+   Code Blocks
+================================ */
+pre {
+  border-radius: var(--radius-md);
+}
+
+/* ===============================
+   Text Selection
+================================ */
+::selection {
+  background: var(--ifm-color-primary-light);
+  color: #fff;
+}
+
+/* ===============================
+   Responsive Tweaks
+================================ */
+@media (max-width: 768px) {
+  .section {
+    margin: 2.5rem 0;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+}

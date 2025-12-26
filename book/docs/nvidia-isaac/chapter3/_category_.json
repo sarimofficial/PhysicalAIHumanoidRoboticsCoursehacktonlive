@@ -1,0 +1,8 @@
+{
+  "label": "Isaac ROS: Accelerating ROS 2 Applications with GPU",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Leveraging NVIDIA GPUs and Isaac ROS for high-performance robotics."
+  }
+}
